@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zadanie 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="header"></header>
+
+    <div class="menu">
+        <a href="z2.html"><h2>Zadanie 2</h2></a>
+        <a href="z3.html"><h2>Zadanie 3</h2></a>
+    </div>
+
+    <div class="zawartosc">
+        <input type="text" id="l1" placeholder="Liczba 1">
+        <input type="text" id="l2" placeholder="Liczba 2">
+        <input type="button" value="+" onclick="operacje_arytmetyczne('+')">
+        <input type="button" value="-" onclick="operacje_arytmetyczne('-')">
+        <input type="button" value="*" onclick="operacje_arytmetyczne('*')">
+        <input type="button" value="/" onclick="operacje_arytmetyczne('/')">
+        <input type="button" value="²" onclick="potega2()">
+
+        <div id="wynik" class="wynik"></div>
+    </div>
+    <div id="info" class="info"></div>
+    <footer>
+    </footer>
+
+    <script>
+        let losowy = Math.floor(Math.random() * 6) + 1;
+        document.getElementById("header").innerHTML = "<img src='" + losowy + ".png' alt='Banner Image'>";
+
+        window.onbeforeunload = function () {
+            return "Czy na pewno chcesz zamknąć stronę?";
+        };
+
+        function operacje_arytmetyczne(operacja) {
+            let liczba_1 = document.getElementById("l1").value;
+            let liczba_2 = document.getElementById("l2").value;
+            let wynikDiv = document.getElementById("wynik");
+
+            wynikDiv.innerHTML = ""; 
+
+            if (liczba_1 === "" || liczba_2 === "") {
+                let komunikat = "Przynajmniej jedno pole jest puste!";
+                wynikDiv.innerHTML = `<p style='color: red;'>${komunikat}</p>`;
+                alert(komunikat);
+                return;
+            }
+            if (isNaN(liczba_1) || isNaN(liczba_2)) {
+                let komunikat = "Wartości muszą być liczbami!";
+                wynikDiv.innerHTML = `<p style='color: red;'>${komunikat}</p>`;
+                alert(komunikat);
+                return;
+            }
+
+            let l1 = parseFloat(liczba_1);
+            let l2 = parseFloat(liczba_2);
+            let wynik;
+
+            switch (operacja) {
+                case '+':
+                    wynik = l1 + l2;
+                    break;
+                case '-':
+                    wynik = l1 - l2;
+                    break;
+                case '*':
+                    wynik = l1 * l2;
+                    break;
+                case '/':
+                    if (l2 === 0) {
+                        let komunikat = "Nie dziel przez 0 cholero!";
+                        wynikDiv.innerHTML = `<p style='color: red;'>${komunikat}</p>`;
+                        alert(komunikat);
+                        return;
+                    }
+                    wynik = l1 / l2;
+                    break;
+                default:
+                    wynik = "Nieznana operacja";
+            }
+
+            wynikDiv.innerHTML = `<p>${l1} ${operacja} ${l2} = ${wynik}</p>`;
+        }
+
+        function potega2() {
+            let liczba_1 = document.getElementById("l1").value;
+            let wynikDiv = document.getElementById("wynik");
+
+            wynikDiv.innerHTML = ""; 
+
+            if (liczba_1 === "") {
+                let komunikat = "Pole Liczba 1 jest puste!";
+                wynikDiv.innerHTML = `<p style='color: red;'>${komunikat}</p>`;
+                alert(komunikat);
+                return;
+            }
+            if (isNaN(liczba_1)) {
+                let komunikat = "Wartość musi być liczbą!";
+                wynikDiv.innerHTML = `<p style='color: red;'>${komunikat}</p>`;
+                alert(komunikat);
+                return;
+            }
+
+            let l1 = parseFloat(liczba_1);
+            let wynik = l1 * l1;
+
+            wynikDiv.innerHTML = `<p>${l1}² = ${wynik}</p>`;
+        }
+    </script>
+</body>
+</html>

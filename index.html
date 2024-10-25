@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strona z banerami</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="header"></header>
+
+    <div class="menu">
+        <a href="z2.html"><h2>Zadanie 2</h2></a>
+        <a href="z3.html"><h2>Zadanie 3</h2></a>
+    </div>
+
+    <div class="zawartosc">
+        <div class="wynik">
+            
+        </div>
+    </div>
+
+    <div class="info">
+    </div>
+
+    <footer>
+    </footer>
+
+    <script>
+        let losowy = Math.floor(Math.random() * 6) + 1;
+        document.getElementById("header").innerHTML = "<img src='" + losowy + ".png' alt='Banner Image'>";
+
+        window.onbeforeunload = function () {
+            return "Czy napewno chcesz zamknąć stronę?";
+        };
+    </script>
+</body>
+</html>

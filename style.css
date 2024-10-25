@@ -1,0 +1,42 @@
+header {
+    background-color: coral;
+    height: 150px;
+    width: 100%;
+}
+
+.menu {
+    height: 800px;
+    width: 30%;
+    background-color: limegreen;
+    float: left;
+}
+
+.zawartosc {
+    height: 800px;
+    width: 70%;
+    background-color: navy;
+    float: left;
+}
+
+.info {
+    height: 100px;
+    background-color: aqua;
+    width: 100%;
+    clear: both;
+    margin-top: 10px;
+    color: red;
+}
+
+.wynik {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+footer {
+    height: 40px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    line-height: 40px;
+    clear: both;
+}
