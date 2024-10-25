@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zadanie 3</title>
+    <title>Zadanie 6</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,10 +20,8 @@
     </div>
 
     <div class="zawartosc">
-        <input type="text" name="a" id="a" placeholder="Wprowadź a">
-        <input type="text" name="b" id="b" placeholder="Wprowadź b">
-        <input type="text" name="c" id="c" placeholder="Wprowadź c">
-        <input type="button" value="Rozwiąż równanie kwadratowe" onclick="rownanie_kwadratowe()">
+        <input type="text" id="kat" placeholder="Wprowadź kąt (1-89 stopni)">
+        <input type="button" value="Generuj tabelę" onclick="generujTabele()">
         <div id="wynik" class="wynik"></div>
     </div>
 
@@ -34,45 +32,57 @@
         <span id="zegar"></span> | 
         <span id="ostatnia_modyfikacja"></span>
     </footer>
+
     <script>
         let losowy = Math.floor(Math.random() * 6) + 1;
         document.getElementById("header").innerHTML = "<img src='" + losowy + ".png' alt='Banner Image'>";
 
         window.onbeforeunload = function () {
-            return "Czy na pewno chcesz zamknąć stronę?";
+            return "Czy napewno chcesz zamknąć stronę?";
         };
 
-        function rownanie_kwadratowe() {
-            let a = parseFloat(document.getElementById("a").value);
-            let b = parseFloat(document.getElementById("b").value);
-            let c = parseFloat(document.getElementById("c").value);
-            let wynikDiv = document.getElementById("wynik");
-            wynikDiv.innerHTML = ""; 
+        function generujTabele() {
+            let kat = document.getElementById("kat").value;
+            let wynik = document.getElementById("wynik");
 
-            if (isNaN(a) || isNaN(b) || isNaN(c)) {
-                wynikDiv.innerHTML = "<p style='color: red;'>Wszystkie pola muszą zawierać liczby!</p>";
-                alert("Wszystkie pola muszą zawierać liczby!");
+            wynik.innerHTML = ""; 
+
+            if (kat === "") {
+                let komunikat = "Pole kąta jest puste!";
+                wynik.innerHTML = `<p style='color: red;'>${komunikat}</p>`;
+                alert(komunikat);
+                return;
+            }
+            if (isNaN(kat) || kat < 1 || kat > 89) {
+                let komunikat = "Kąt musi być liczbą z zakresu 1-89!";
+                wynik.innerHTML = `<p style='color: red;'>${komunikat}</p>`;
+                alert(komunikat);
                 return;
             }
 
-            if (a === 0) {
-                wynikDiv.innerHTML = "<p style='color: red;'>Wartość 'a' nie może być równa 0 w równaniu kwadratowym!</p>";
-                alert("Wartość 'a' nie może być równa 0 w równaniu kwadratowym!");
-                return;
-            }
+            kat = parseFloat(kat);
+            let radiany = kat * (Math.PI / 180);
 
-            let delta = b * b - 4 * a * c;
+            let sin = Math.sin(radiany).toFixed(4);
+            let cos = Math.cos(radiany).toFixed(4);
+            let tan = Math.tan(radiany).toFixed(4);
 
-            if (delta < 0) {
-                wynikDiv.innerHTML = "<p>Równanie nie ma rozwiązań rzeczywistych.</p>";
-            } else if (delta === 0) {
-                let x = -b / (2 * a);
-                wynikDiv.innerHTML = `<p>Równanie ma jedno rozwiązanie: x = ${x}</p>`;
-            } else {
-                let x1 = (-b + Math.sqrt(delta)) / (2 * a);
-                let x2 = (-b - Math.sqrt(delta)) / (2 * a);
-                wynikDiv.innerHTML = `<p>Równanie ma dwa rozwiązania: x1 = ${x1}, x2 = ${x2}</p>`;
-            }
+            wynik.innerHTML = `
+                <table border="1">
+                    <tr>
+                        <th>Kąt</th>
+                        <th>Sin</th>
+                        <th>Cos</th>
+                        <th>Tan</th>
+                    </tr>
+                    <tr>
+                        <td>${kat}°</td>
+                        <td>${sin}</td>
+                        <td>${cos}</td>
+                        <td>${tan}</td>
+                    </tr>
+                </table>
+            `;
         }
         function aktualizujDate() {
             const dataElement = document.getElementById("data");

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zadanie 3</title>
+    <title>Strona główna</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body onload="aktualizujDate()">
     <header id="header"></header>
 
     <div class="menu">
@@ -20,10 +20,15 @@
     </div>
 
     <div class="zawartosc">
-        <input type="text" name="a" id="a" placeholder="Wprowadź a">
-        <input type="text" name="b" id="b" placeholder="Wprowadź b">
-        <input type="text" name="c" id="c" placeholder="Wprowadź c">
-        <input type="button" value="Rozwiąż równanie kwadratowe" onclick="rownanie_kwadratowe()">
+        <input type="text" id="kwota" placeholder="Kwota w złotych">
+        <select id="waluta">
+            <option value="">Wybierz walutę</option>
+            <option value="EUR">Euro (EUR)</option>
+            <option value="USD">Dolar amerykański (USD)</option>
+            <option value="GBP">Funt brytyjski (GBP)</option>
+            <option value="CHF">Frank szwajcarski (CHF)</option>
+        </select>
+        <input type="button" value="Zamień" onclick="zamianaWaluty()">
         <div id="wynik" class="wynik"></div>
     </div>
 
@@ -34,46 +39,53 @@
         <span id="zegar"></span> | 
         <span id="ostatnia_modyfikacja"></span>
     </footer>
+
     <script>
         let losowy = Math.floor(Math.random() * 6) + 1;
         document.getElementById("header").innerHTML = "<img src='" + losowy + ".png' alt='Banner Image'>";
 
         window.onbeforeunload = function () {
-            return "Czy na pewno chcesz zamknąć stronę?";
+            return "Czy napewno chcesz zamknąć stronę?";
         };
 
-        function rownanie_kwadratowe() {
-            let a = parseFloat(document.getElementById("a").value);
-            let b = parseFloat(document.getElementById("b").value);
-            let c = parseFloat(document.getElementById("c").value);
+        function zamianaWaluty() {
+            let kwota = document.getElementById("kwota").value;
+            let waluta = document.getElementById("waluta").value;
             let wynikDiv = document.getElementById("wynik");
+
             wynikDiv.innerHTML = ""; 
 
-            if (isNaN(a) || isNaN(b) || isNaN(c)) {
-                wynikDiv.innerHTML = "<p style='color: red;'>Wszystkie pola muszą zawierać liczby!</p>";
-                alert("Wszystkie pola muszą zawierać liczby!");
+            if (kwota === "") {
+                let komunikat = "Pole kwoty jest puste!";
+                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
+                alert(komunikat);
+                return;
+            }
+            if (isNaN(kwota) || kwota <= 0) {
+                let komunikat = "Podaj prawidłową kwotę w złotych!";
+                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
+                alert(komunikat);
+                return;
+            }
+            if (waluta === "") {
+                let komunikat = "Wybierz walutę!";
+                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
+                alert(komunikat);
                 return;
             }
 
-            if (a === 0) {
-                wynikDiv.innerHTML = "<p style='color: red;'>Wartość 'a' nie może być równa 0 w równaniu kwadratowym!</p>";
-                alert("Wartość 'a' nie może być równa 0 w równaniu kwadratowym!");
-                return;
-            }
+            kwota = parseFloat(kwota);
+            let kursy = {
+                "EUR": 4.55,
+                "USD": 4.10,
+                "GBP": 5.30,
+                "CHF": 4.50
+            };
 
-            let delta = b * b - 4 * a * c;
-
-            if (delta < 0) {
-                wynikDiv.innerHTML = "<p>Równanie nie ma rozwiązań rzeczywistych.</p>";
-            } else if (delta === 0) {
-                let x = -b / (2 * a);
-                wynikDiv.innerHTML = `<p>Równanie ma jedno rozwiązanie: x = ${x}</p>`;
-            } else {
-                let x1 = (-b + Math.sqrt(delta)) / (2 * a);
-                let x2 = (-b - Math.sqrt(delta)) / (2 * a);
-                wynikDiv.innerHTML = `<p>Równanie ma dwa rozwiązania: x1 = ${x1}, x2 = ${x2}</p>`;
-            }
+            let wynik = (kwota / kursy[waluta]).toFixed(2);
+            wynikDiv.innerHTML = "<p>" + kwota + " zł = " + wynik + " " + waluta + "</p>";
         }
+
         function aktualizujDate() {
             const dataElement = document.getElementById("data");
             const zegarElement = document.getElementById("zegar");
