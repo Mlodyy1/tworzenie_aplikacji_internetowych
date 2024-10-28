@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zadanie 16</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="header"></header>
+
+    <div class="menu">
+        <a href="z2.html"><h5>Zadanie 2</h5></a>
+        <a href="z3.html"><h5>Zadanie 3</h5></a>
+        <a href="z4.html"><h5>Zadanie 4</h5></a>
+        <a href="z5.html"><h5>Zadanie 5</h5></a>
+        <a href="z6.html"><h5>Zadanie 6</h5></a>
+        <a href="z8.html"><h5>Zadanie 8</h5></a>
+        <a href="z9.html"><h5>Zadanie 9</h5></a>
+        <a href="z10.html"><h5>Zadanie 10</h5></a>
+        <a href="z11.html"><h5>Zadanie 11</h5></a>
+        <a href="z12.html"><h5>Zadanie 12</h5></a>
+        <a href="z13.html"><h5>Zadanie 13</h5></a>
+        <a href="z14.html"><h5>Zadanie 14</h5></a>
+        <a href="z15.html"><h5>Zadanie 15</h5></a>
+        <a href="z16.html"><h5>Zadanie 16</h5></a>
+        <a href="z17.html"><h5>Zadanie 17</h5></a>
+        <a href="z18.html"><h5>Zadanie 18</h5></a>
+        <a href="z19.html"><h5>Zadanie 19</h5></a>
+        <a href="z20.html"><h5>Zadanie 20</h5></a>
+        <a href="z21.html"><h5>Zadanie 21</h5></a>
+        <a href="z22.html"><h5>Zadanie 22</h5></a>
+    </div>
+    
+
+    <div class="zawartosc">
+        <h3>Konwersja liczby dziesiętnej:</h3>
+        <label for="liczbaDziesietna">Liczba dziesiętna:</label>
+        <input type="number" id="liczbaDziesietna" min="0"><br>
+
+        <label for="systemLiczbowy">Wybierz system docelowy:</label>
+        <select id="systemLiczbowy">
+            <option value="2">Binarny</option>
+            <option value="8">Ósemkowy</option>
+            <option value="16">Hexadecymalny</option>
+        </select><br>
+
+        <button onclick="zamienLiczbe()">Zamień</button>
+
+        <div class="wynik" id="wynik"></div>
+    </div>
+
+    <footer>
+        <span id="data"></span> | 
+        <span id="zegar"></span> | 
+        <span id="ostatnia_modyfikacja"></span>
+    </footer>
+
+    <script>
+        document.getElementById("header").innerHTML = "<img src='" + (Math.floor(Math.random() * 6) + 1) + ".png' alt='Banner Image'>";
+
+        function aktualizujDate() {
+            const dzisiaj = new Date();
+            document.getElementById("data").innerHTML = "Dzisiaj: " + dzisiaj.toLocaleDateString("pl-PL");
+            document.getElementById("zegar").innerHTML = "Godzina: " + dzisiaj.toLocaleTimeString("pl-PL");
+            document.getElementById("ostatnia_modyfikacja").innerHTML = "Ostatnia modyfikacja: " + document.lastModified;
+        }
+        
+        setInterval(aktualizujDate, 1000);
+
+        function zamienLiczbe() {
+            const liczba = parseInt(document.getElementById("liczbaDziesietna").value);
+            const system = parseInt(document.getElementById("systemLiczbowy").value);
+            const wynikElement = document.getElementById("wynik");
+
+            if (isNaN(liczba) || liczba < 0) {
+                alert("Proszę podać dodatnią liczbę dziesiętną.");
+                return;
+            }
+
+            const wynik = liczba.toString(system);
+            let nazwaSystemu;
+            
+            if (system === 2) {
+                nazwaSystemu = "Binarnie";
+            } else if (system === 8) {
+                nazwaSystemu = "Ósemkowo";
+            } else {
+                nazwaSystemu = "Hexadecymalnie";
+            }
+
+            wynikElement.innerHTML = `${liczba} dziesiętnie to ${wynik} ${nazwaSystemu}.`;
+        }
+    </script>
+</body>
+</html>

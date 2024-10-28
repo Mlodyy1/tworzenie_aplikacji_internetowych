@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zadanie 9</title>
+    <title>Zadanie 20</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .active {
+            background-color: yellow;
+        }
+    </style>
 </head>
-<body onload="aktualizujDate()">
+<body>
     <header id="header"></header>
 
     <div class="menu">
@@ -34,20 +39,18 @@
     
 
     <div class="zawartosc">
-        <input type="text" id="kwota" placeholder="Kwota w złotych">
-        <select id="waluta">
-            <option value="">Wybierz walutę</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="USD">Dolar amerykański (USD)</option>
-            <option value="GBP">Funt brytyjski (GBP)</option>
-            <option value="CHF">Frank szwajcarski (CHF)</option>
-        </select>
-        <input type="button" value="Zamień" onclick="zamianaWaluty()">
-        <div id="wynik" class="wynik"></div>
+        <input type="text" class="inputField" id="number1" onfocus="zmienKolor(this)" onblur="przywrocKolor(this)" placeholder="Liczba 1">
+        <input type="text" class="inputField" id="number2" onfocus="zmienKolor(this)" onblur="przywrocKolor(this)" placeholder="Liczba 2">
+        <input type="text" class="inputField" id="number3" onfocus="zmienKolor(this)" onblur="przywrocKolor(this)" placeholder="Liczba 3">
+        <button onclick="sortujLiczby()">Sortuj liczby</button>
+
+        <div id="result" class="zawartosc">
+            Wynik: 
+        </div>
     </div>
-
+    
     <div class="info"></div>
-
+    
     <footer>
         <span id="data"></span> | 
         <span id="zegar"></span> | 
@@ -59,46 +62,8 @@
         document.getElementById("header").innerHTML = "<img src='" + losowy + ".png' alt='Banner Image'>";
 
         window.onbeforeunload = function () {
-            return "Czy napewno chcesz zamknąć stronę?";
+            return "Czy na pewno chcesz zamknąć stronę?";
         };
-
-        function zamianaWaluty() {
-            let kwota = document.getElementById("kwota").value;
-            let waluta = document.getElementById("waluta").value;
-            let wynikDiv = document.getElementById("wynik");
-
-            wynikDiv.innerHTML = ""; 
-
-            if (kwota === "") {
-                let komunikat = "Pole kwoty jest puste!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (isNaN(kwota) || kwota <= 0) {
-                let komunikat = "Podaj prawidłową kwotę w złotych!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (waluta === "") {
-                let komunikat = "Wybierz walutę!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-
-            kwota = parseFloat(kwota);
-            let kursy = {
-                "EUR": 4.55,
-                "USD": 4.10,
-                "GBP": 5.30,
-                "CHF": 4.50
-            };
-
-            let wynik = (kwota / kursy[waluta]).toFixed(2);
-            wynikDiv.innerHTML = "<p>" + kwota + " zł = " + wynik + " " + waluta + "</p>";
-        }
 
         function aktualizujDate() {
             const dataElement = document.getElementById("data");
@@ -112,6 +77,33 @@
         }
 
         setInterval(aktualizujDate, 1000); // Aktualizacja co sekundę
+
+        function zmienKolor(pole) {
+            const inputFields = document.querySelectorAll('.inputField');
+            inputFields.forEach(input => {
+                input.classList.remove('active');
+            });
+            pole.classList.add('active');
+        }
+
+        function przywrocKolor(pole) {
+            pole.classList.remove('active');
+        }
+
+        function sortujLiczby() {
+            const num1 = parseFloat(document.getElementById("number1").value) || NaN;
+            const num2 = parseFloat(document.getElementById("number2").value) || NaN;
+            const num3 = parseFloat(document.getElementById("number3").value) || NaN;
+
+            const liczby = [num1, num2, num3];
+
+            if (liczby.every(num => !isNaN(num))) {
+                liczby.sort((a, b) => a - b);
+                document.getElementById("result").innerHTML = "Wynik: " + liczby.join(", ");
+            } else {
+                document.getElementById("result").innerHTML = "Proszę wprowadzić poprawne liczby.";
+            }
+        }
     </script>
 </body>
 </html>

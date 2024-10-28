@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zadanie 10</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="header"></header>
+    <div class="menu">
+        <a href="z2.html"><h5>Zadanie 2</h5></a>
+        <a href="z3.html"><h5>Zadanie 3</h5></a>
+        <a href="z4.html"><h5>Zadanie 4</h5></a>
+        <a href="z5.html"><h5>Zadanie 5</h5></a>
+        <a href="z6.html"><h5>Zadanie 6</h5></a>
+        <a href="z8.html"><h5>Zadanie 8</h5></a>
+        <a href="z9.html"><h5>Zadanie 9</h5></a>
+        <a href="z10.html"><h5>Zadanie 10</h5></a>
+        <a href="z11.html"><h5>Zadanie 11</h5></a>
+        <a href="z12.html"><h5>Zadanie 12</h5></a>
+        <a href="z13.html"><h5>Zadanie 13</h5></a>
+        <a href="z14.html"><h5>Zadanie 14</h5></a>
+        <a href="z15.html"><h5>Zadanie 15</h5></a>
+        <a href="z16.html"><h5>Zadanie 16</h5></a>
+        <a href="z17.html"><h5>Zadanie 17</h5></a>
+        <a href="z18.html"><h5>Zadanie 18</h5></a>
+        <a href="z19.html"><h5>Zadanie 19</h5></a>
+        <a href="z20.html"><h5>Zadanie 20</h5></a>
+        <a href="z21.html"><h5>Zadanie 21</h5></a>
+        <a href="z22.html"><h5>Zadanie 22</h5></a>
+    </div>
+    
+    <div class="zawartosc">
+        <input type="password" id="haslo" placeholder="Wpisz hasło">
+        <input type="button" value="Weryfikuj" onclick="weryfikujHaslo()">
+        <span id="passwordFeedback"></span>
+    </div>
+
+    <div class="info">
+    </div>
+
+    <footer>
+        <span id="data"></span> | <span id="zegar"></span> | <span id="ostatnia_modyfikacja"></span>
+    </footer>
+
+    <script>
+        document.getElementById("header").innerHTML = "<img src='" + (Math.floor(Math.random() * 6) + 1) + ".png' alt='Banner Image'>";
+
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById("data").textContent = "Dzisiaj: " + now.toLocaleDateString("pl-PL");
+            document.getElementById("zegar").textContent = "Godzina: " + now.toLocaleTimeString("pl-PL");
+            document.getElementById("ostatnia_modyfikacja").textContent = "Ostatnia modyfikacja: " + document.lastModified;
+        }, 1000);
+
+        function weryfikujHaslo() {
+            const password = document.getElementById("haslo").value;
+            const feedback = document.getElementById("passwordFeedback");
+
+            if (!password) {
+                feedback.textContent = "HASŁO JEST PUSTE";
+                feedback.style.color = "red";
+            } else if (password.length >= 7 && /\d/.test(password)) {
+                feedback.textContent = "HASŁO JEST DOBRE";
+                feedback.style.color = "green";
+            } else if (password.length >= 4 && password.length <= 6 && /\d/.test(password)) {
+                feedback.textContent = "HASŁO JEST ŚREDNIE";
+                feedback.style.color = "blue";
+            } else {
+                feedback.textContent = "HASŁO JEST SŁABE";
+                feedback.style.color = "yellow";
+            }
+        }
+    </script>
+</body>
+</html>

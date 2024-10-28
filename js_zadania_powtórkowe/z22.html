@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strona główna</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header id="header"></header>
+
+    <div class="menu">
+        <a href="z2.html"><h5>Zadanie 2</h5></a>
+        <a href="z3.html"><h5>Zadanie 3</h5></a>
+        <a href="z4.html"><h5>Zadanie 4</h5></a>
+        <a href="z5.html"><h5>Zadanie 5</h5></a>
+        <a href="z6.html"><h5>Zadanie 6</h5></a>
+        <a href="z8.html"><h5>Zadanie 8</h5></a>
+        <a href="z9.html"><h5>Zadanie 9</h5></a>
+        <a href="z10.html"><h5>Zadanie 10</h5></a>
+        <a href="z11.html"><h5>Zadanie 11</h5></a>
+        <a href="z12.html"><h5>Zadanie 12</h5></a>
+        <a href="z13.html"><h5>Zadanie 13</h5></a>
+        <a href="z14.html"><h5>Zadanie 14</h5></a>
+        <a href="z15.html"><h5>Zadanie 15</h5></a>
+        <a href="z16.html"><h5>Zadanie 16</h5></a>
+        <a href="z17.html"><h5>Zadanie 17</h5></a>
+        <a href="z18.html"><h5>Zadanie 18</h5></a>
+        <a href="z19.html"><h5>Zadanie 19</h5></a>
+        <a href="z20.html"><h5>Zadanie 20</h5></a>
+        <a href="z21.html"><h5>Zadanie 21</h5></a>
+        <a href="z22.html"><h5>Zadanie 22</h5></a>
+    </div>
+    
+    <div class="zawartosc">
+        <textarea id="tekst" placeholder="Wpisz tekst tutaj..."></textarea>
+        
+        <label for="wielkosc">Wielkość tekstu:</label>
+        <select id="wielkosc">
+            <option value="10px">Liliput</option>
+            <option value="14px">Mały</option>
+            <option value="20px">Średni</option>
+            <option value="36px">Duży</option>
+            <option value="72px">Ogromny</option>
+        </select>
+
+        <fieldset>
+            <legend>Kolor tekstu:</legend>
+            <input type="radio" id="czerwony" name="kolor" value="red"> <label for="czerwony">Czerwony</label><br>
+            <input type="radio" id="zielony" name="kolor" value="green"> <label for="zielony">Zielony</label><br>
+            <input type="radio" id="cyan" name="kolor" value="cyan"> <label for="cyan">Cyan</label><br>
+            <input type="radio" id="niebieski" name="kolor" value="blue"> <label for="niebieski">Niebieski</label><br>
+            <input type="radio" id="zolty" name="kolor" value="yellow"> <label for="zolty">Żółty</label><br>
+            <input type="radio" id="losowy" name="kolor" value="random"> <label for="losowy">Losowy</label><br>
+        </fieldset>
+
+        <label for="czcionka">Czcionka:</label>
+        <select id="czcionka">
+            <option value="Arial">Arial</option>
+            <option value="Comic Sans MS">Comic Sans</option>
+            <option value="Tahoma">Tahoma</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Georgia">Georgia</option>
+        </select>
+
+        <input type="checkbox" id="pogrubione"> <label for="pogrubione">Pogrubione</label><br>
+
+        <label for="kolorTla">Kolor tła:</label>
+        <input type="color" id="kolorTla" value="#ffffff"><br>
+
+        <input type="checkbox" id="jechac"> <label for="jechac">Czy ma jechać?</label><br>
+
+        <button onclick="pokaz()">Pokaż tekst</button>
+        <div id="wynik"></div>
+    </div>
+
+    <div class="info">
+    </div>
+
+    <footer>
+        <span id="data"></span> | 
+        <span id="zegar"></span> | 
+        <span id="ostatnia_modyfikacja"></span>
+    </footer>
+
+    <script>
+        let losowy = Math.floor(Math.random() * 6) + 1;
+        document.getElementById("header").innerHTML = "<img src='" + losowy + ".png' alt='Banner Image'>";
+
+        window.onbeforeunload = function () {
+            return "Czy napewno chcesz zamknąć stronę?";
+        };
+        function aktualizujDate() {
+            const dataElement = document.getElementById("data");
+            const zegarElement = document.getElementById("zegar");
+            const ostatnia_modyfikacjaElement = document.getElementById("ostatnia_modyfikacja");
+
+            const dzisiaj = new Date();
+            dataElement.innerHTML = "Dzisiaj: " + dzisiaj.toLocaleDateString("pl-PL");
+            zegarElement.innerHTML = "Godzina: " + dzisiaj.toLocaleTimeString("pl-PL");
+            ostatnia_modyfikacjaElement.innerHTML = "Ostatnia modyfikacja: " + document.lastModified;
+        }
+
+        setInterval(aktualizujDate, 1000); // Aktualizacja co sekundę
+
+        function pokaz(){
+            let tekst = document.getElementById("tekst").value;
+            let wielkosc = document.getElementById("wielkosc").value;
+            let kolor;
+            if (document.getElementById("losowy").checked) {
+                let r = Math.floor(Math.random() * 256);
+                let g = Math.floor(Math.random() * 256);
+                let b = Math.floor(Math.random() * 256);
+                kolor = `rgb(${r}, ${g}, ${b})`;
+            } else {
+                kolor = document.querySelector('input[name="kolor"]:checked').value;
+            }
+
+            let czcionka = document.getElementById("czcionka").value;
+            let pogrubione = document.getElementById("pogrubione").checked ? "bold" : "normal";
+            let kolorTla = document.getElementById("kolorTla").value;
+
+            let jechac = document.getElementById("jechac").checked;
+
+            document.querySelector(".zawartosc").style.backgroundColor = kolorTla; 
+
+            if (jechac) {
+                document.getElementById("wynik").innerHTML = `<marquee style="font-size: ${wielkosc}; color: ${kolor}; font-family: ${czcionka}; font-weight: ${pogrubione};">${tekst}</marquee>`;
+            } else {
+                document.getElementById("wynik").innerHTML = `<span style="font-size: ${wielkosc}; color: ${kolor}; font-family: ${czcionka}; font-weight: ${pogrubione};">${tekst}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>

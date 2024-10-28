@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zadanie 6</title>
+    <title>Zadanie 18</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header id="header"></header>
+    <header id="header">
+        <h1 id="naglowek" onmouseover="zmienKolor('pink')" onmouseout="przywrocKolor()">Nagłówek strony</h1>
+    </header>
 
     <div class="menu">
         <a href="z2.html"><h5>Zadanie 2</h5></a>
@@ -34,12 +36,10 @@
     
 
     <div class="zawartosc">
-        <input type="text" id="kat" placeholder="Wprowadź kąt (1-89 stopni)">
-        <input type="button" value="Generuj tabelę" onclick="generujTabele()">
-        <div id="wynik" class="wynik"></div>
     </div>
 
-    <div class="info"></div>
+    <div class="info" id="info">
+    </div>
 
     <footer>
         <span id="data"></span> | 
@@ -48,56 +48,11 @@
     </footer>
 
     <script>
-        let losowy = Math.floor(Math.random() * 6) + 1;
-        document.getElementById("header").innerHTML = "<img src='" + losowy + ".png' alt='Banner Image'>";
 
         window.onbeforeunload = function () {
-            return "Czy napewno chcesz zamknąć stronę?";
+            return "Czy na pewno chcesz zamknąć stronę?";
         };
 
-        function generujTabele() {
-            let kat = document.getElementById("kat").value;
-            let wynik = document.getElementById("wynik");
-
-            wynik.innerHTML = ""; 
-
-            if (kat === "") {
-                let komunikat = "Pole kąta jest puste!";
-                wynik.innerHTML = `<p style='color: red;'>${komunikat}</p>`;
-                alert(komunikat);
-                return;
-            }
-            if (isNaN(kat) || kat < 1 || kat > 89) {
-                let komunikat = "Kąt musi być liczbą z zakresu 1-89!";
-                wynik.innerHTML = `<p style='color: red;'>${komunikat}</p>`;
-                alert(komunikat);
-                return;
-            }
-
-            kat = parseFloat(kat);
-            let radiany = kat * (Math.PI / 180);
-
-            let sin = Math.sin(radiany).toFixed(4);
-            let cos = Math.cos(radiany).toFixed(4);
-            let tan = Math.tan(radiany).toFixed(4);
-
-            wynik.innerHTML = `
-                <table border="1">
-                    <tr>
-                        <th>Kąt</th>
-                        <th>Sin</th>
-                        <th>Cos</th>
-                        <th>Tan</th>
-                    </tr>
-                    <tr>
-                        <td>${kat}°</td>
-                        <td>${sin}</td>
-                        <td>${cos}</td>
-                        <td>${tan}</td>
-                    </tr>
-                </table>
-            `;
-        }
         function aktualizujDate() {
             const dataElement = document.getElementById("data");
             const zegarElement = document.getElementById("zegar");
@@ -110,6 +65,14 @@
         }
 
         setInterval(aktualizujDate, 1000); // Aktualizacja co sekundę
+        // Przez obrazek w nagłówku zmiana koloru nie działa
+        function zmienKolor(kolor) {
+            document.getElementById("info").style.backgroundColor = kolor; 
+        }
+
+        function przywrocKolor() {
+            document.getElementById("info").style.backgroundColor = ""; 
+        }
     </script>
 </body>
 </html>

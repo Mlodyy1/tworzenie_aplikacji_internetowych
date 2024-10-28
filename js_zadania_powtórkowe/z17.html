@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zadanie 9</title>
+    <title>Zadanie 17</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body onload="aktualizujDate()">
+<body>
     <header id="header"></header>
 
     <div class="menu">
@@ -34,19 +34,20 @@
     
 
     <div class="zawartosc">
-        <input type="text" id="kwota" placeholder="Kwota w złotych">
-        <select id="waluta">
-            <option value="">Wybierz walutę</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="USD">Dolar amerykański (USD)</option>
-            <option value="GBP">Funt brytyjski (GBP)</option>
-            <option value="CHF">Frank szwajcarski (CHF)</option>
-        </select>
-        <input type="button" value="Zamień" onclick="zamianaWaluty()">
-        <div id="wynik" class="wynik"></div>
-    </div>
+        <h3>Walidacja danych:</h3>
+        <label for="kodPocztowy">Kod pocztowy (CC-CCC):</label>
+        <input type="text" id="kodPocztowy" placeholder="00-000"><br>
 
-    <div class="info"></div>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" placeholder="przyklad@domena.com"><br>
+
+        <label for="pesel">Numer PESEL:</label>
+        <input type="text" id="pesel" placeholder="00000000000"><br>
+
+        <button onclick="walidujDane()">Sprawdź</button>
+
+        <div class="wynik" id="wynik"></div>
+    </div>
 
     <footer>
         <span id="data"></span> | 
@@ -59,46 +60,8 @@
         document.getElementById("header").innerHTML = "<img src='" + losowy + ".png' alt='Banner Image'>";
 
         window.onbeforeunload = function () {
-            return "Czy napewno chcesz zamknąć stronę?";
+            return "Czy na pewno chcesz zamknąć stronę?";
         };
-
-        function zamianaWaluty() {
-            let kwota = document.getElementById("kwota").value;
-            let waluta = document.getElementById("waluta").value;
-            let wynikDiv = document.getElementById("wynik");
-
-            wynikDiv.innerHTML = ""; 
-
-            if (kwota === "") {
-                let komunikat = "Pole kwoty jest puste!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (isNaN(kwota) || kwota <= 0) {
-                let komunikat = "Podaj prawidłową kwotę w złotych!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (waluta === "") {
-                let komunikat = "Wybierz walutę!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-
-            kwota = parseFloat(kwota);
-            let kursy = {
-                "EUR": 4.55,
-                "USD": 4.10,
-                "GBP": 5.30,
-                "CHF": 4.50
-            };
-
-            let wynik = (kwota / kursy[waluta]).toFixed(2);
-            wynikDiv.innerHTML = "<p>" + kwota + " zł = " + wynik + " " + waluta + "</p>";
-        }
 
         function aktualizujDate() {
             const dataElement = document.getElementById("data");
@@ -112,6 +75,41 @@
         }
 
         setInterval(aktualizujDate, 1000); // Aktualizacja co sekundę
+
+        function walidujDane() {
+            const kodPocztowy = document.getElementById("kodPocztowy").value;
+            const email = document.getElementById("email").value;
+            const pesel = document.getElementById("pesel").value;
+            const wynikElement = document.getElementById("wynik");
+            let wynik = "";
+
+            // Walidacja kodu pocztowego
+            const kodPocztowyRegex = /^\d{2}-\d{3}$/;
+            if (!kodPocztowyRegex.test(kodPocztowy)) {
+                wynik += "Kod pocztowy jest niepoprawny. Format to CC-CCC.<br>";
+            } else {
+                wynik += "Kod pocztowy jest poprawny.<br>";
+            }
+
+            // Walidacja e-maila
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                wynik += "E-mail jest niepoprawny.<br>";
+            } else {
+                wynik += "E-mail jest poprawny.<br>";
+            }
+
+            // Walidacja numeru PESEL
+            const peselRegex = /^\d{11}$/;
+            if (!peselRegex.test(pesel)) {
+                wynik += "PESEL jest niepoprawny. Powinien składać się z 11 cyfr.<br>";
+            } else {
+                const plec = pesel[9] % 2 === 0 ? "Kobiety" : "Mężczyzny";
+                wynik += "PESEL jest poprawny. To jest PESEL " + plec + ".<br>";
+            }
+
+            wynikElement.innerHTML = wynik;
+        }
     </script>
 </body>
 </html>

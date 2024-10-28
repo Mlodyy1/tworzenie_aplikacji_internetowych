@@ -3,11 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zadanie 9</title>
+    <title>Zadanie 19</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .error {
+            color: red;
+            margin-top: 10px;
+            display: none; 
+        }
+    </style>
 </head>
-<body onload="aktualizujDate()">
-    <header id="header"></header>
+<body>
+    <header id="header">
+    </header>
 
     <div class="menu">
         <a href="z2.html"><h5>Zadanie 2</h5></a>
@@ -34,19 +42,12 @@
     
 
     <div class="zawartosc">
-        <input type="text" id="kwota" placeholder="Kwota w złotych">
-        <select id="waluta">
-            <option value="">Wybierz walutę</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="USD">Dolar amerykański (USD)</option>
-            <option value="GBP">Funt brytyjski (GBP)</option>
-            <option value="CHF">Frank szwajcarski (CHF)</option>
-        </select>
-        <input type="button" value="Zamień" onclick="zamianaWaluty()">
-        <div id="wynik" class="wynik"></div>
+        <input type="text" id="inputField" oninput="sprawdzPole()">
+        <div id="komentarz" class="error">Pole musi zawierać liczbę</div>
     </div>
 
-    <div class="info"></div>
+    <div class="info" id="info">
+    </div>
 
     <footer>
         <span id="data"></span> | 
@@ -55,50 +56,13 @@
     </footer>
 
     <script>
+        
         let losowy = Math.floor(Math.random() * 6) + 1;
         document.getElementById("header").innerHTML = "<img src='" + losowy + ".png' alt='Banner Image'>";
-
+        
         window.onbeforeunload = function () {
-            return "Czy napewno chcesz zamknąć stronę?";
+            return "Czy na pewno chcesz zamknąć stronę?";
         };
-
-        function zamianaWaluty() {
-            let kwota = document.getElementById("kwota").value;
-            let waluta = document.getElementById("waluta").value;
-            let wynikDiv = document.getElementById("wynik");
-
-            wynikDiv.innerHTML = ""; 
-
-            if (kwota === "") {
-                let komunikat = "Pole kwoty jest puste!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (isNaN(kwota) || kwota <= 0) {
-                let komunikat = "Podaj prawidłową kwotę w złotych!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (waluta === "") {
-                let komunikat = "Wybierz walutę!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-
-            kwota = parseFloat(kwota);
-            let kursy = {
-                "EUR": 4.55,
-                "USD": 4.10,
-                "GBP": 5.30,
-                "CHF": 4.50
-            };
-
-            let wynik = (kwota / kursy[waluta]).toFixed(2);
-            wynikDiv.innerHTML = "<p>" + kwota + " zł = " + wynik + " " + waluta + "</p>";
-        }
 
         function aktualizujDate() {
             const dataElement = document.getElementById("data");
@@ -112,6 +76,21 @@
         }
 
         setInterval(aktualizujDate, 1000); // Aktualizacja co sekundę
+        function sprawdzPole() {
+            const inputField = document.getElementById("inputField");
+            const komentarz = document.getElementById("komentarz");
+            const value = inputField.value.trim(); 
+
+            if (value === "") {
+                komentarz.textContent = "Pole musi być wypełnione";
+                komentarz.style.display = "block";
+            } else if (isNaN(value) || value === "") { 
+                komentarz.textContent = "Pole musi zawierać liczbę";
+                komentarz.style.display = "block";
+            } else {
+                komentarz.style.display = "none"; 
+            }
+        }
     </script>
 </body>
 </html>

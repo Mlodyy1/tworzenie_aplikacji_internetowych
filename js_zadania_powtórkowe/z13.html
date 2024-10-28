@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zadanie 9</title>
+    <title>Zadanie 13</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        label, select, .radio-group {
+            display: block;
+            margin: 10px 0;
+        }
+    </style>
 </head>
-<body onload="aktualizujDate()">
+<body>
     <header id="header"></header>
 
     <div class="menu">
@@ -32,21 +38,32 @@
         <a href="z22.html"><h5>Zadanie 22</h5></a>
     </div>
     
-
     <div class="zawartosc">
-        <input type="text" id="kwota" placeholder="Kwota w złotych">
-        <select id="waluta">
-            <option value="">Wybierz walutę</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="USD">Dolar amerykański (USD)</option>
-            <option value="GBP">Funt brytyjski (GBP)</option>
-            <option value="CHF">Frank szwajcarski (CHF)</option>
+        <h3>Wybierz liczbę dni oraz rodzaj ulgi, aby obliczyć koszt biletu:</h3>
+        
+        <label for="dni">Wybierz liczbę dni:</label>
+        <select id="dni">
+            <option value="30">30 dni</option>
+            <option value="60">60 dni - 5% rabatu</option>
+            <option value="90">90 dni - 10% rabatu</option>
+            <option value="180">180 dni - 15% rabatu</option>
+            <option value="360">360 dni - 20% rabatu</option>
         </select>
-        <input type="button" value="Zamień" onclick="zamianaWaluty()">
-        <div id="wynik" class="wynik"></div>
+
+        <div>
+            <p>Wybierz ulgę:</p>
+            <label><input type="radio" name="ulga" value="1" checked> Bez zniżki</label>
+            <label><input type="radio" name="ulga" value="0.5"> Ulga szkolna</label>
+            <label><input type="radio" name="ulga" value="0.5"> Emeryci</label>
+        </div>
+
+        <button onclick="obliczCene()">Wypisz cenę</button>
+
+        <div class="wynik" id="wynik"></div>
     </div>
 
-    <div class="info"></div>
+    <div class="info">
+    </div>
 
     <footer>
         <span id="data"></span> | 
@@ -62,44 +79,6 @@
             return "Czy napewno chcesz zamknąć stronę?";
         };
 
-        function zamianaWaluty() {
-            let kwota = document.getElementById("kwota").value;
-            let waluta = document.getElementById("waluta").value;
-            let wynikDiv = document.getElementById("wynik");
-
-            wynikDiv.innerHTML = ""; 
-
-            if (kwota === "") {
-                let komunikat = "Pole kwoty jest puste!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (isNaN(kwota) || kwota <= 0) {
-                let komunikat = "Podaj prawidłową kwotę w złotych!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (waluta === "") {
-                let komunikat = "Wybierz walutę!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-
-            kwota = parseFloat(kwota);
-            let kursy = {
-                "EUR": 4.55,
-                "USD": 4.10,
-                "GBP": 5.30,
-                "CHF": 4.50
-            };
-
-            let wynik = (kwota / kursy[waluta]).toFixed(2);
-            wynikDiv.innerHTML = "<p>" + kwota + " zł = " + wynik + " " + waluta + "</p>";
-        }
-
         function aktualizujDate() {
             const dataElement = document.getElementById("data");
             const zegarElement = document.getElementById("zegar");
@@ -112,6 +91,34 @@
         }
 
         setInterval(aktualizujDate, 1000); // Aktualizacja co sekundę
+
+        function obliczCene() {
+            const dni = parseInt(document.getElementById("dni").value);
+            let rabat = 0;
+
+            switch(dni) {
+                case 60:
+                    rabat = 0.05;
+                    break;
+                case 90:
+                    rabat = 0.10;
+                    break;
+                case 180:
+                    rabat = 0.15;
+                    break;
+                case 360:
+                    rabat = 0.20;
+                    break;
+            }
+
+            const podstawowaCena = dni * 3.25;
+            const cenaPoRabacie = podstawowaCena * (1 - rabat);
+
+            const ulga = parseFloat(document.querySelector("input[name='ulga']:checked").value);
+            const cenaKoncowa = cenaPoRabacie * ulga;
+
+            document.getElementById("wynik").innerHTML = "Cena biletu: " + cenaKoncowa.toFixed(2) + " zł";
+        }
     </script>
 </body>
 </html>

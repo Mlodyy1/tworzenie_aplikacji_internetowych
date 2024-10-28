@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zadanie 9</title>
+    <title>Zadanie 12</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body onload="aktualizujDate()">
+<body onload="sprawdzWiek()">
     <header id="header"></header>
 
     <div class="menu">
@@ -33,17 +33,8 @@
     </div>
     
 
-    <div class="zawartosc">
-        <input type="text" id="kwota" placeholder="Kwota w złotych">
-        <select id="waluta">
-            <option value="">Wybierz walutę</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="USD">Dolar amerykański (USD)</option>
-            <option value="GBP">Funt brytyjski (GBP)</option>
-            <option value="CHF">Frank szwajcarski (CHF)</option>
-        </select>
-        <input type="button" value="Zamień" onclick="zamianaWaluty()">
-        <div id="wynik" class="wynik"></div>
+    <div class="zawartosc" id="zawartosc">
+        
     </div>
 
     <div class="info"></div>
@@ -62,42 +53,43 @@
             return "Czy napewno chcesz zamknąć stronę?";
         };
 
-        function zamianaWaluty() {
-            let kwota = document.getElementById("kwota").value;
-            let waluta = document.getElementById("waluta").value;
-            let wynikDiv = document.getElementById("wynik");
-
-            wynikDiv.innerHTML = ""; 
-
-            if (kwota === "") {
-                let komunikat = "Pole kwoty jest puste!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
+        function sprawdzWiek() {
+            let wiek = prompt("Podaj swój wiek:");
+            if (wiek === null || wiek === "") {
+                alert("Nie podano wieku.");
                 return;
             }
-            if (isNaN(kwota) || kwota <= 0) {
-                let komunikat = "Podaj prawidłową kwotę w złotych!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (waluta === "") {
-                let komunikat = "Wybierz walutę!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
+            if (isNaN(wiek) || wiek <= 0) {
+                alert("Podaj poprawny wiek.");
                 return;
             }
 
-            kwota = parseFloat(kwota);
-            let kursy = {
-                "EUR": 4.55,
-                "USD": 4.10,
-                "GBP": 5.30,
-                "CHF": 4.50
-            };
+            wiek = parseInt(wiek);
+            let stan;
+            let obrazek;
 
-            let wynik = (kwota / kursy[waluta]).toFixed(2);
-            wynikDiv.innerHTML = "<p>" + kwota + " zł = " + wynik + " " + waluta + "</p>";
+            if (wiek >= 0 && wiek <= 5) {
+                stan = "Niemowlę";
+                obrazek = "niemowle.png";
+            } else if (wiek >= 6 && wiek <= 12) {
+                stan = "Dziecko";
+                obrazek = "dziecko.png";
+            } else if (wiek >= 13 && wiek <= 18) {
+                stan = "Nastolatek";
+                obrazek = "nastolatek.png";
+            } else if (wiek >= 19 && wiek <= 30) {
+                stan = "Młody dorosły";
+                obrazek = "mlody_dorosly.png";
+            } else if (wiek >= 31 && wiek <= 64) {
+                stan = "Dorosły";
+                obrazek = "dorosly.png";
+            } else {
+                stan = "Senior";
+                obrazek = "senior.png";
+            }
+
+            document.getElementById("zawartosc").innerHTML = 
+                "<h2>" + stan + "</h2><img widht=200px; height=200px; src='" + obrazek + "' alt='" + stan + "'>";
         }
 
         function aktualizujDate() {

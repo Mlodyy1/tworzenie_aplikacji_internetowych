@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zadanie 9</title>
+    <title>Zadanie 15</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body onload="aktualizujDate()">
+<body>
     <header id="header"></header>
 
     <div class="menu">
@@ -34,19 +34,23 @@
     
 
     <div class="zawartosc">
-        <input type="text" id="kwota" placeholder="Kwota w złotych">
-        <select id="waluta">
-            <option value="">Wybierz walutę</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="USD">Dolar amerykański (USD)</option>
-            <option value="GBP">Funt brytyjski (GBP)</option>
-            <option value="CHF">Frank szwajcarski (CHF)</option>
-        </select>
-        <input type="button" value="Zamień" onclick="zamianaWaluty()">
-        <div id="wynik" class="wynik"></div>
+        <h3>Oblicz całkowitą wartość do zapłaty:</h3>
+        <label for="ilosc">Ilość towarów:</label>
+        <input type="number" id="ilosc" min="0" step="1"><br>
+
+        <label for="cenaJednostkowa">Cena jednostkowa (PLN):</label>
+        <input type="text" id="cenaJednostkowa"><br>
+
+        <input type="checkbox" id="stalyKlient">
+        <label for="stalyKlient">Jestem stałym klientem</label><br>
+
+        <button onclick="obliczCene()">Do zapłaty</button>
+
+        <div class="wynik" id="wynik"></div>
     </div>
 
-    <div class="info"></div>
+    <div class="info">
+    </div>
 
     <footer>
         <span id="data"></span> | 
@@ -62,44 +66,6 @@
             return "Czy napewno chcesz zamknąć stronę?";
         };
 
-        function zamianaWaluty() {
-            let kwota = document.getElementById("kwota").value;
-            let waluta = document.getElementById("waluta").value;
-            let wynikDiv = document.getElementById("wynik");
-
-            wynikDiv.innerHTML = ""; 
-
-            if (kwota === "") {
-                let komunikat = "Pole kwoty jest puste!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (isNaN(kwota) || kwota <= 0) {
-                let komunikat = "Podaj prawidłową kwotę w złotych!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (waluta === "") {
-                let komunikat = "Wybierz walutę!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-
-            kwota = parseFloat(kwota);
-            let kursy = {
-                "EUR": 4.55,
-                "USD": 4.10,
-                "GBP": 5.30,
-                "CHF": 4.50
-            };
-
-            let wynik = (kwota / kursy[waluta]).toFixed(2);
-            wynikDiv.innerHTML = "<p>" + kwota + " zł = " + wynik + " " + waluta + "</p>";
-        }
-
         function aktualizujDate() {
             const dataElement = document.getElementById("data");
             const zegarElement = document.getElementById("zegar");
@@ -112,6 +78,37 @@
         }
 
         setInterval(aktualizujDate, 1000); // Aktualizacja co sekundę
+
+        function obliczCene() {
+            const iloscTowarow = parseInt(document.getElementById("ilosc").value);
+            const cenaJednostkowaInput = document.getElementById("cenaJednostkowa").value.replace(",", ".");
+            const stalyKlient = document.getElementById("stalyKlient").checked;
+
+            if (isNaN(iloscTowarow) || iloscTowarow <= 0) {
+                alert("Proszę wprowadzić poprawną, dodatnią ilość towarów.");
+                return;
+            }
+
+            let cenaJednostkowa = parseFloat(cenaJednostkowaInput);
+
+            if (isNaN(cenaJednostkowa) || cenaJednostkowa <= 0) {
+                alert("Proszę wprowadzić poprawną, dodatnią cenę jednostkową.");
+                return;
+            }
+
+            if (iloscTowarow > 20) {
+                cenaJednostkowa *= 0.95;
+            }
+
+            let cenaCalkowita = iloscTowarow * cenaJednostkowa;
+
+            if (stalyKlient) {
+                cenaCalkowita *= 0.90;
+            }
+
+            document.getElementById("wynik").innerHTML = 
+                "Do zapłaty: " + cenaCalkowita.toFixed(2) + " PLN";
+        }
     </script>
 </body>
 </html>

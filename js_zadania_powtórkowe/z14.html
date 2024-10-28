@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zadanie 9</title>
+    <title>Zadanie 14</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body onload="aktualizujDate()">
+<body>
     <header id="header"></header>
 
     <div class="menu">
@@ -34,19 +34,23 @@
     
 
     <div class="zawartosc">
-        <input type="text" id="kwota" placeholder="Kwota w złotych">
-        <select id="waluta">
-            <option value="">Wybierz walutę</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="USD">Dolar amerykański (USD)</option>
-            <option value="GBP">Funt brytyjski (GBP)</option>
-            <option value="CHF">Frank szwajcarski (CHF)</option>
-        </select>
-        <input type="button" value="Zamień" onclick="zamianaWaluty()">
-        <div id="wynik" class="wynik"></div>
+        <h3>Oblicz powierzchnię i koszt malowania pokoju:</h3>
+        <label for="dlugosc">Długość pokoju (m):</label>
+        <input type="number" id="dlugosc" min="0" step="0.01"><br>
+
+        <label for="szerokosc">Szerokość pokoju (m):</label>
+        <input type="number" id="szerokosc" min="0" step="0.01"><br>
+
+        <input type="checkbox" id="sufit" name="sufit">
+        <label for="sufit">Uwzględnij sufit</label><br>
+
+        <button onclick="obliczKoszt()">Oblicz</button>
+
+        <div class="wynik" id="wynik"></div>
     </div>
 
-    <div class="info"></div>
+    <div class="info">
+    </div>
 
     <footer>
         <span id="data"></span> | 
@@ -62,44 +66,6 @@
             return "Czy napewno chcesz zamknąć stronę?";
         };
 
-        function zamianaWaluty() {
-            let kwota = document.getElementById("kwota").value;
-            let waluta = document.getElementById("waluta").value;
-            let wynikDiv = document.getElementById("wynik");
-
-            wynikDiv.innerHTML = ""; 
-
-            if (kwota === "") {
-                let komunikat = "Pole kwoty jest puste!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (isNaN(kwota) || kwota <= 0) {
-                let komunikat = "Podaj prawidłową kwotę w złotych!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (waluta === "") {
-                let komunikat = "Wybierz walutę!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-
-            kwota = parseFloat(kwota);
-            let kursy = {
-                "EUR": 4.55,
-                "USD": 4.10,
-                "GBP": 5.30,
-                "CHF": 4.50
-            };
-
-            let wynik = (kwota / kursy[waluta]).toFixed(2);
-            wynikDiv.innerHTML = "<p>" + kwota + " zł = " + wynik + " " + waluta + "</p>";
-        }
-
         function aktualizujDate() {
             const dataElement = document.getElementById("data");
             const zegarElement = document.getElementById("zegar");
@@ -112,6 +78,28 @@
         }
 
         setInterval(aktualizujDate, 1000); // Aktualizacja co sekundę
+
+        function obliczKoszt() {
+            const dlugosc = parseFloat(document.getElementById("dlugosc").value);
+            const szerokosc = parseFloat(document.getElementById("szerokosc").value);
+            const wysokosc = 2.7;
+            const kosztZaM2 = 8;
+            const sufit = document.getElementById("sufit").checked;
+
+            if (isNaN(dlugosc) || isNaN(szerokosc) || dlugosc <= 0 || szerokosc <= 0) {
+                alert("Proszę wprowadzić poprawne, dodatnie wartości długości i szerokości.");
+                return;
+            }
+
+            const powierzchniaScian = 2 * wysokosc * (dlugosc + szerokosc);
+            const powierzchniaSufitu = sufit ? dlugosc * szerokosc : 0;
+            const powierzchniaCalkowita = powierzchniaScian + powierzchniaSufitu;
+            const kosztMalowania = powierzchniaCalkowita * kosztZaM2;
+
+            document.getElementById("wynik").innerHTML = 
+                "Powierzchnia do malowania: " + powierzchniaCalkowita.toFixed(2) + " m²<br>" +
+                "Koszt malowania: " + kosztMalowania.toFixed(2) + " zł";
+        }
     </script>
 </body>
 </html>

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zadanie 9</title>
+    <title>Zadanie 11</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body onload="aktualizujDate()">
+<body>
     <header id="header"></header>
 
     <div class="menu">
@@ -34,19 +34,18 @@
     
 
     <div class="zawartosc">
-        <input type="text" id="kwota" placeholder="Kwota w złotych">
-        <select id="waluta">
-            <option value="">Wybierz walutę</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="USD">Dolar amerykański (USD)</option>
-            <option value="GBP">Funt brytyjski (GBP)</option>
-            <option value="CHF">Frank szwajcarski (CHF)</option>
-        </select>
-        <input type="button" value="Zamień" onclick="zamianaWaluty()">
-        <div id="wynik" class="wynik"></div>
+        <label for="temperature">Podaj temperaturę w °C:</label>
+        <input type="text" id="temperature" placeholder="Temperatura w °C">
+        <br>
+        <input type="button" value="Konwertuj na Fahrenheity" onclick="konwertujNaFahrenheity()">
+        <span id="wynikFahrenheita"></span>
+        <br>
+        <input type="button" value="Konwertuj na Kelwiny" onclick="konwertujNaKelwiny()">
+        <span id="wynikKelwina"></span>
     </div>
 
-    <div class="info"></div>
+    <div class="info">
+    </div>
 
     <footer>
         <span id="data"></span> | 
@@ -56,49 +55,11 @@
 
     <script>
         let losowy = Math.floor(Math.random() * 6) + 1;
-        document.getElementById("header").innerHTML = "<img src='" + losowy + ".png' alt='Banner Image'>";
+        document.getElementById("header").innerHTML = "<img src='" + losowy + ".png' alt='Obrazek banera'>";
 
         window.onbeforeunload = function () {
-            return "Czy napewno chcesz zamknąć stronę?";
+            return "Czy na pewno chcesz zamknąć stronę?";
         };
-
-        function zamianaWaluty() {
-            let kwota = document.getElementById("kwota").value;
-            let waluta = document.getElementById("waluta").value;
-            let wynikDiv = document.getElementById("wynik");
-
-            wynikDiv.innerHTML = ""; 
-
-            if (kwota === "") {
-                let komunikat = "Pole kwoty jest puste!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (isNaN(kwota) || kwota <= 0) {
-                let komunikat = "Podaj prawidłową kwotę w złotych!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-            if (waluta === "") {
-                let komunikat = "Wybierz walutę!";
-                wynikDiv.innerHTML = "<p style='color: red;'>" + komunikat + "</p>";
-                alert(komunikat);
-                return;
-            }
-
-            kwota = parseFloat(kwota);
-            let kursy = {
-                "EUR": 4.55,
-                "USD": 4.10,
-                "GBP": 5.30,
-                "CHF": 4.50
-            };
-
-            let wynik = (kwota / kursy[waluta]).toFixed(2);
-            wynikDiv.innerHTML = "<p>" + kwota + " zł = " + wynik + " " + waluta + "</p>";
-        }
 
         function aktualizujDate() {
             const dataElement = document.getElementById("data");
@@ -112,6 +73,41 @@
         }
 
         setInterval(aktualizujDate, 1000); // Aktualizacja co sekundę
+
+        function walidujTemperature(input) {
+            if (input === "") {
+                alert("Pole temperatury jest puste!");
+                return false;
+            }
+            const temperatura = parseFloat(input);
+            if (isNaN(temperatura)) {
+                alert("Wprowadzona wartość nie jest liczbą!");
+                return false;
+            }
+            if (temperatura < -273.15) {
+                alert("Temperatura nie może być niższa niż -273,15°C!");
+                return false;
+            }
+            return true;
+        }
+
+        function konwertujNaFahrenheity() {
+            const input = document.getElementById("temperature").value;
+            if (!walidujTemperature(input)) return;
+            
+            const celsius = parseFloat(input);
+            const fahrenheit = (celsius * 9/5) + 32;
+            document.getElementById("wynikFahrenheita").innerHTML = "Fahrenheity: " + fahrenheit.toFixed(2) + "°F";
+        }
+
+        function konwertujNaKelwiny() {
+            const input = document.getElementById("temperature").value;
+            if (!walidujTemperature(input)) return;
+
+            const celsius = parseFloat(input);
+            const kelvin = celsius + 273.15;
+            document.getElementById("wynikKelwina").innerHTML = "Kelwiny: " + kelvin.toFixed(2) + "K";
+        }
     </script>
 </body>
 </html>
